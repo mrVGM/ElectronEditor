@@ -7,6 +7,11 @@ let groupElement = {
                 group: undefined,
                 width: undefined,
                 height: undefined,
+                refreshSize(inst) {
+                    let htmlElement = inst.interface.findHTMLElement(inst);
+                    htmlElement.style.width = inst.interface.width + '%';
+                    htmlElement.style.height = inst.interface.height + '%';
+                }
             }
         };
         return inst;

@@ -37,7 +37,7 @@ let window = {
             interface: {
                 group: undefined,
                 splitHorizontally: function(inst) {
-                    console.log('Splitting horizontally')
+                    console.log('Splitting horizontally');
                 },
                 splitVertically: function(inst) {
                     console.log('Splitting vertically');

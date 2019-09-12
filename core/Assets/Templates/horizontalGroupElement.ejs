@@ -1,6 +1,6 @@
 <% let child = source.gameObject.children[0]; %>
 <% child = document.appData.api.getComponent(child, document.appData.scripts.renderEJS); %>
 <% child.interface.group = source.interface.group; %>
-<div app_id="<%= source.interface.id %>" style="font-size: 14px; height: <%= source.interface.height %>; width: <%= source.interface.width %>; display: inline-block; white-space: nowrap;">
+<div app_id="<%= source.interface.id %>" style="font-size: 14px; height: <%= source.interface.height %>%; width: <%= source.interface.width %>%; display: inline-block; white-space: nowrap;">
     <%- child.interface.render(child); %>
 </div>
