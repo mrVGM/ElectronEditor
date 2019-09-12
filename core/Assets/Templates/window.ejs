@@ -1,0 +1,30 @@
+<div app_id="<%= source.interface.id %>" class="full-size">
+    <div class="window-header">
+        <div style="display: inline-block; white-space: nowrap;">
+            <div style="display: inline; white-space: nowrap;">
+                <% let closeButton = source.params.closeButton.gameObjectRef; %>
+                <% closeButton = document.appData.api.getComponent(closeButton, document.appData.scripts.renderEJS); %>
+                <%- closeButton.interface.render(closeButton) %>
+    
+                <% let downSplitArrow = source.params.downSplitArrow.gameObjectRef; %>
+                <% downSplitArrow = document.appData.api.getComponent(downSplitArrow, document.appData.scripts.renderEJS); %>
+                <%- downSplitArrow.interface.render(downSplitArrow) %>
+
+                <% let rightSplitArrow = source.params.rightSplitArrow.gameObjectRef; %>
+                <% rightSplitArrow = document.appData.api.getComponent(rightSplitArrow, document.appData.scripts.renderEJS); %>
+                <%- rightSplitArrow.interface.render(rightSplitArrow) %>
+            </div>
+            <div style="display: inline; white-space: nowrap;">
+                <% for (let i = 0; i < source.params.windowTypes.value.length; ++i) { %>
+                    <% let windowType = source.params.windowTypes.value[i].gameObjectRef; %>
+                    <% windowType = document.appData.api.getComponent(windowType, document.appData.scripts.renderEJS); %>
+                    <%- windowType.interface.render(windowType) %>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <% let contentArea = source.params.contentArea.gameObjectRef; %>
+    <% contentArea = document.appData.api.getComponent(contentArea, document.appData.scripts.renderEJS); %>
+    <%- contentArea.interface.render(contentArea) %>
+</div>
