@@ -23,6 +23,11 @@ let renderEJS = {
                     let res = ejs.render(ejsFile, { source: inst });
                     return res;
                 },
+                renderToElement: function(inst) {
+                    let div = document.createElement('div');
+                    div.innerHTML = inst.interface.render(inst);
+                    return div.children[0];
+                },
                 findHTMLElement: function(inst) {
                     let queryString = '[app_id="' + inst.interface.id + '"]';
                     let res =  document.querySelector(queryString);

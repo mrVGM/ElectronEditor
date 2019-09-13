@@ -38,9 +38,7 @@ let windowGroup = {
                         inst.gameObject.children.push(element);
                         groupElement.interface.width = 100;
                         groupElement.interface.height = 100;
-                        let div = document.createElement('div');
-                        div.innerHTML = groupElement.interface.render(groupElement);
-                        let elem = div.children[0];
+                        let elem = groupElement.interface.renderToElement(groupElement);
                         let windowGroupElement = inst.interface.findHTMLElement(inst);
                         windowGroupElement.appendChild(elem);
                     }
@@ -54,9 +52,7 @@ let windowGroup = {
                         inst.gameObject.children.splice(index + 1, 0, element);
                         groupElement.interface.width = leftElement.interface.width;
                         groupElement.interface.height = 100;
-                        let div = document.createElement('div');
-                        div.innerHTML = groupElement.interface.render(groupElement);
-                        let elem = div.children[0];
+                        let elem = groupElement.interface.renderToElement(groupElement);
                         let windowGroupElement = inst.interface.findHTMLElement(inst);
                         windowGroupElement.appendChild(elem);
                     }
