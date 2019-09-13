@@ -43,18 +43,31 @@ let windowGroup = {
                         windowGroupElement.appendChild(elem);
                     }
                     else {
-                        let leftElement = inst.gameObject.children[index];
-                        leftElement = document.appData.api.getComponent(leftElement, document.appData.scripts.renderEJS);
-                        leftElement.interface.width /= 2;
+                        let splittedElement = inst.gameObject.children[index];
+                        splittedElement = document.appData.api.getComponent(splittedElement, document.appData.scripts.renderEJS);
 
-                        leftElement.interface.refreshSize(leftElement);
+                        if (inst.params.groupType.value === 'Horizontal') {
+                            splittedElement.interface.width /= 2;
+                        }
+                        else if (inst.params.groupType.value === 'Vertical') {
+                            splittedElement.interface.height /= 2;
+                        }
+                        splittedElement.interface.refreshSize(splittedElement);
 
                         inst.gameObject.children.splice(index + 1, 0, element);
-                        groupElement.interface.width = leftElement.interface.width;
-                        groupElement.interface.height = 100;
+                        groupElement.interface.width = splittedElement.interface.width;
+                        groupElement.interface.height = splittedElement.interface.height;
                         let elem = groupElement.interface.renderToElement(groupElement);
+
                         let windowGroupElement = inst.interface.findHTMLElement(inst);
-                        windowGroupElement.appendChild(elem);
+                        
+                        if (index + 1 === inst.gameObject.children.length) {
+                            windowGroupElement.appendChild(elem);
+                        }
+                        else {
+                            let leftElementHTML = splittedElement.interface.findHTMLElement(splittedElement);
+                            windowGroupElement.insertBefore(elem, leftElementHTML.nextSibling);
+                        }
                     }
                 }
             }
