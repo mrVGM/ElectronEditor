@@ -1,10 +1,10 @@
-<div app_id="<%= source.interface.id %>" class="full-size" style="font-size: 0px; position: relative; display: inline-block; white-space: nowrap;">
+<div app_id="<%= source.interface.id %>" class="full-size" style="position: relative;">
     <% let children = source.gameObject.children; %>
     <% for (let i = 0; i < children.length; ++i) { %>
         <% let cur = document.appData.api.getComponent(children[i], document.appData.scripts.renderEJS); %>
         <% cur.interface.group = source; %>
-        <% cur.interface.width = 100 / children.length; %>
-        <% cur.interface.height = 100%; %>
+        <% cur.interface.height = 100 / children.length; %>
+        <% cur.interface.width = 100; %>
         <%- cur.interface.render(cur); %>
     <% } %>
 </div>
