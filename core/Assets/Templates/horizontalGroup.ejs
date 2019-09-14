@@ -4,7 +4,7 @@
         <% let cur = document.appData.api.getComponent(children[i], document.appData.scripts.renderEJS); %>
         <% cur.interface.group = source; %>
         <% cur.interface.width = 100 / children.length; %>
-        <% cur.interface.height = 100%; %>
+        <% cur.interface.height = 100; %>
         <%- cur.interface.render(cur); %>
     <% } %>
 </div>

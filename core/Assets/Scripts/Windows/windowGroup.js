@@ -21,11 +21,14 @@ let windowGroup = {
                 }
             },
             interface: {
-                addElement: function(inst, index) {
+                addElement: function(inst, index, windowElement) {
                     let elementPrefab = document.appData.library[inst.params.groupElementPrefab.value].prefabStr;
                     let windowPrefab = document.appData.library[inst.params.windowPrefab.value].prefabStr;
                     let element = document.appData.api.instantiatePrefabFromString(elementPrefab);
-                    let window = document.appData.api.instantiatePrefabFromString(windowPrefab);
+                    let window = windowElement;
+                    if (!windowElement) {
+                        window = document.appData.api.instantiatePrefabFromString(windowPrefab);
+                    }
                     element.children.push(window);
                     window.parent = element;
 
@@ -34,13 +37,14 @@ let windowGroup = {
 
                     element.parent = inst.gameObject;
 
+                    let groupElementHTML = groupElement.interface.renderToElement(groupElement);
+
                     if (inst.gameObject.children.length === 0) {
                         inst.gameObject.children.push(element);
                         groupElement.interface.width = 100;
                         groupElement.interface.height = 100;
-                        let elem = groupElement.interface.renderToElement(groupElement);
                         let windowGroupElement = inst.interface.findHTMLElement(inst);
-                        windowGroupElement.appendChild(elem);
+                        windowGroupElement.appendChild(groupElementHTML);
                     }
                     else {
                         let splittedElement = inst.gameObject.children[index];
@@ -57,16 +61,15 @@ let windowGroup = {
                         inst.gameObject.children.splice(index + 1, 0, element);
                         groupElement.interface.width = splittedElement.interface.width;
                         groupElement.interface.height = splittedElement.interface.height;
-                        let elem = groupElement.interface.renderToElement(groupElement);
 
                         let windowGroupElement = inst.interface.findHTMLElement(inst);
                         
                         if (index + 1 === inst.gameObject.children.length) {
-                            windowGroupElement.appendChild(elem);
+                            windowGroupElement.appendChild(groupElementHTML);
                         }
                         else {
                             let leftElementHTML = splittedElement.interface.findHTMLElement(splittedElement);
-                            windowGroupElement.insertBefore(elem, leftElementHTML.nextSibling);
+                            windowGroupElement.insertBefore(groupElementHTML, leftElementHTML.nextSibling);
                         }
                     }
                 }
