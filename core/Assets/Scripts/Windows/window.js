@@ -46,16 +46,19 @@ let window = {
             },
             interface: {
                 group: undefined,
-                splitHorizontally: function(inst) {
-                    console.log('Splitting horizontally');
+                split: function(inst, splitType) {
                     curWindow = inst.interface.findHTMLElement(inst);
-                    if (!inst.interface.group || inst.interface.group.params.groupType.value !== 'Horizontal') {
-                        let horizontalGroupPrefab = document.appData.library[inst.params.horizontalGroup.value].prefabStr;
-                        horizontalGroupPrefab = document.appData.api.instantiatePrefabFromString(horizontalGroupPrefab);
-                        let horizontalGroup = document.appData.api.getComponent(horizontalGroupPrefab, document.appData.scripts.renderEJS);
-                        curWindow.parentElement.innerHTML = horizontalGroup.interface.render(horizontalGroup);
-                        horizontalGroup.interface.addElement(horizontalGroup, 0, inst);
-                        horizontalGroup.interface.addElement(horizontalGroup, 0);
+                    if (!inst.interface.group || inst.interface.group.params.groupType.value !== splitType) {
+                        let prefabID = inst.params.horizontalGroup.value;
+                        if (splitType === 'Vertical') {
+                            prefabID = inst.params.verticalGroup.value;
+                        }
+                        let groupPrefab = document.appData.library[prefabID].prefabStr;
+                        groupPrefab = document.appData.api.instantiatePrefabFromString(groupPrefab);
+                        let groupComponent = document.appData.api.getComponent(groupPrefab, document.appData.scripts.renderEJS);
+                        curWindow.parentElement.innerHTML = groupComponent.interface.render(groupComponent);
+                        groupComponent.interface.addElement(groupComponent, 0, inst);
+                        groupComponent.interface.addElement(groupComponent, 0);
                     } 
                     else {
                         let group = inst.interface.group;
@@ -72,8 +75,13 @@ let window = {
                         group.interface.addElement(group, index);
                     }
                 },
+                splitHorizontally: function(inst) {
+                    console.log('Splitting horizontally');
+                    inst.interface.split(inst, 'Horizontal');
+                },
                 splitVertically: function(inst) {
                     console.log('Splitting vertically');
+                    inst.interface.split(inst, 'Vertical');
                 }
             }
         };
