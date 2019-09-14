@@ -23,15 +23,8 @@ let windowGroup = {
             interface: {
                 addElement: function(inst, index, windowElement) {
                     let elementPrefab = document.appData.library[inst.params.groupElementPrefab.value].prefabStr;
-                    let windowPrefab = document.appData.library[inst.params.windowPrefab.value].prefabStr;
                     let element = document.appData.api.instantiatePrefabFromString(elementPrefab);
-                    let window = windowElement;
-                    if (!windowElement) {
-                        window = document.appData.api.instantiatePrefabFromString(windowPrefab);
-                    }
-                    element.children.push(window);
-                    window.parent = element;
-
+                    
                     let groupElement = document.appData.api.getComponent(element, document.appData.scripts.renderEJS);
                     groupElement.interface.group = inst;
 
@@ -72,6 +65,20 @@ let windowGroup = {
                             windowGroupElement.insertBefore(groupElementHTML, leftElementHTML.nextSibling);
                         }
                     }
+                    groupElement.interface.refreshSize(groupElement);
+
+                    let window = windowElement;
+                    if (!window) {
+                        let windowPrefab = document.appData.library[inst.params.windowPrefab.value].prefabStr;
+                        window = document.appData.api.instantiatePrefabFromString(windowPrefab);
+                        window = document.appData.api.getComponent(window, document.appData.scripts.renderEJS);
+                    }
+                    element.children.push(window.gameObject);
+                    window.gameObject.parent = element;
+                    window.interface.group = groupElement.interface.group;
+
+                    let windowHTML = window.interface.renderToElement(window);
+                    groupElementHTML.appendChild(windowHTML);
                 }
             }
         };
