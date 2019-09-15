@@ -30,7 +30,9 @@ let closeWindow = {
                     }
 
                     if (windowElement.params.elementType.value === inst.params.closeButtonTag.value) {
-                        console.log('Closing window', windowElement.params.window.gameObjectRef);
+                        let window = windowElement.params.window.gameObjectRef;
+                        window = document.appData.api.getComponent(window, document.appData.scripts.renderEJS);
+                        window.interface.close(window);
                     }
                 },
             }

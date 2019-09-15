@@ -82,6 +82,46 @@ let window = {
                 splitVertically: function(inst) {
                     console.log('Splitting vertically');
                     inst.interface.split(inst, 'Vertical');
+                },
+                close: function(inst) {
+                    if (!inst.interface.group) {
+                        console.log('Cannot close the initial window!');
+                        return;
+                    }
+
+                    console.log('Closing');
+
+                    let group = inst.interface.group;
+                    let index = -1;
+                    for (let i = 0; i < group.gameObject.children.length; ++i) {
+                        let curElem = group.gameObject.children[i];
+                        let curWindow = curElem.children[0];
+                        curWindow = document.appData.api.getComponent(curWindow, document.appData.scripts.renderEJS);
+                        if (curWindow.interface.id === inst.interface.id) {
+                            index = i;
+                            break;
+                        }
+                    }
+                    
+                    let element = group.gameObject.children[index];
+                    element = document.appData.api.getComponent(element, document.appData.scripts.renderEJS);
+                    
+                    let elementToExpandIndex = Math.max(0, index - 1);
+                    
+                    let htmlElement = element.interface.findHTMLElement(element);
+                    htmlElement.parentElement.removeChild(htmlElement);
+                    
+                    group.gameObject.children.splice(index, 1);
+                    let elementToExpand = group.gameObject.children[elementToExpandIndex];
+                    elementToExpand = document.appData.api.getComponent(elementToExpand, document.appData.scripts.renderEJS);
+                    
+                    if (group.params.groupType.value === 'Horizontal') {
+                        elementToExpand.interface.width += element.interface.width;
+                    } 
+                    else {
+                        elementToExpand.interface.height += element.interface.height;
+                    }
+                    elementToExpand.interface.refreshSize(elementToExpand);
                 }
             }
         };
