@@ -37,7 +37,7 @@ let windowGroup = {
                         }
                     }
                 },
-                addElement: function(inst, index, windowElement) {
+                addElement: function(inst, index, windowElement, windowElementHTML) {
                     let elementPrefab = document.appData.library[inst.params.groupElementPrefab.value].prefabStr;
                     let element = document.appData.api.instantiatePrefabFromString(elementPrefab);
                     
@@ -83,15 +83,16 @@ let windowGroup = {
                     groupElement.interface.refreshSize(groupElement);
 
                     let window = windowElement;
+                    let windowHTML = windowElementHTML;
                     if (!window) {
                         let windowPrefab = document.appData.library[inst.params.windowPrefab.value].prefabStr;
                         window = document.appData.api.instantiatePrefabFromString(windowPrefab);
                         window = document.appData.api.getComponent(window, document.appData.scripts.renderEJS);
+                        windowHTML = window.interface.renderToElement(window);
                     }
                     element.children.push(window.gameObject);
                     window.gameObject.parent = element;
 
-                    let windowHTML = window.interface.renderToElement(window);
                     groupElementHTML.appendChild(windowHTML);
                 }
             }

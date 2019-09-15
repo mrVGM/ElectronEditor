@@ -91,7 +91,7 @@ let window = {
                         }
                         let groupComponent = document.appData.api.getComponent(groupPrefab, document.appData.scripts.renderEJS);
                         curWindow.parentElement.innerHTML = groupComponent.interface.render(groupComponent);
-                        groupComponent.interface.addElement(groupComponent, 0, inst);
+                        groupComponent.interface.addElement(groupComponent, 0, inst, curWindow);
                         groupComponent.interface.addElement(groupComponent, 0);
                     } 
                     else {
