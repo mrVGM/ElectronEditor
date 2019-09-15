@@ -18,9 +18,68 @@ let windowGroup = {
                     name: 'Window Prefab',
                     type: 'fileObject',
                     value: undefined
+                },
+                splittingLinePrefab: {
+                    name: 'Splitting Line Prefab',
+                    type: 'fileObject',
+                    value: undefined
                 }
             },
             interface: {
+                splittingLines: [],
+                updateSplittingLines: function(inst) {
+                    let groupHTML = inst.interface.findHTMLElement(inst);
+                    for (let i = 0; i < inst.interface.splittingLines.length; ++i) {
+                        let cur = inst.interface.splittingLines[i];
+                        let curHTML = cur.interface.findHTMLElement(cur);
+                        groupHTML.removeChild(curHTML);
+                    }
+                    let linesNeeded = inst.gameObject.children.length - 1;
+                    inst.interface.splittingLines.slice(0, linesNeeded);
+
+                    let linePrefabStr = inst.params.splittingLinePrefab.value;
+                    linePrefabStr = document.appData.library[linePrefabStr].prefabStr;
+                    for (let i = inst.interface.splittingLines.length; i < linesNeeded; ++i) {
+                        let linePrefab = document.appData.api.instantiatePrefabFromString(linePrefabStr);
+                        let lineComponent = document.appData.api.getComponent(linePrefab, document.appData.scripts.renderEJS);
+                        inst.interface.splittingLines.push(lineComponent);
+                    }
+
+                    for (let i = 0; i < inst.interface.splittingLines.length; ++i) {
+                        let cur = inst.interface.splittingLines[i];
+                        cur.interface.group = inst;
+
+                        let curHTML = cur.interface.renderToElement(cur);
+
+                        let groupHTML = inst.interface.findHTMLElement(inst);
+                        groupHTML.appendChild(curHTML);
+
+                        let offsetPerc = 0;
+                        for (let j = 0; j < i + 1; ++j) {
+                            let elem = inst.gameObject.children[j];
+                            elem = document.appData.api.getComponent(elem, document.appData.scripts.renderEJS);
+                            let elemHTML = elem.interface.findHTMLElement(elem);
+                            if (inst.params.groupType.value === 'Horizontal') {
+                                offsetPerc += elemHTML.offsetWidth / groupHTML.offsetWidth;
+                            }
+                            else {
+                                offsetPerc += elemHTML.offsetHeight / groupHTML.offsetHeight;
+                            }
+                        }
+                        offsetPerc *= 100;
+
+                        if (inst.params.groupType.value === 'Horizontal') {
+                            let lineWidthPerc = 100 / groupHTML.offsetWidth;
+                            curHTML.style.left = offsetPerc - lineWidthPerc + '%';
+                            curHTML.style.top = '0%';
+                        }
+                        else {
+                            let lineHeightPerc = 100 / groupHTML.offsetHeight;
+                            curHTML.style.top = offsetPerc - lineHeightPerc + '%';
+                            curHTML.style.left = '0%';
+                        }
+                    }
+                },
                 getElement: function(inst) {
                     let cur = inst.gameObject;
                     while(true) {
@@ -94,6 +153,8 @@ let windowGroup = {
                     window.gameObject.parent = element;
 
                     groupElementHTML.appendChild(windowHTML);
+
+                    inst.interface.updateSplittingLines(inst);
                 }
             }
         };

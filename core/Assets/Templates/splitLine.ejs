@@ -1,0 +1,4 @@
+<% let group = source.interface.getGroup(source); %>
+<% let lineClass = group.params.groupType.value === 'Horizontal' ? 'horizontalSplitLine' : 'verticalSplitLine'; %>
+<div app_id="<%= source.interface.id %>" class="<%= lineClass  %>">
+</div>
