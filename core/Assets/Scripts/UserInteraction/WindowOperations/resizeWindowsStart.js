@@ -31,7 +31,16 @@ let resizeWindowsStart = {
 
                     if (windowElement.params.elementType.value === inst.params.splitLineTag.value) {
                         let splitLine = document.appData.api.getComponent(windowElement.gameObject, document.appData.scripts.renderEJS);
-                        console.log(splitLine.interface.getAffectedElements(splitLine));
+                        let affectedElements = splitLine.interface.getAffectedElements(splitLine);
+                        let pipe = inst.gameObject.parent;
+                        pipe = document.appData.api.getComponent(pipe, document.appData.scripts.stateNode);
+
+                        let context = pipe.interface.context;
+                        context.affectedElements = affectedElements;
+                        inst.interface.state = 'Disabled';
+                        
+                        context.initialMousePos = { x: e.offsetX + e.target.offsetLeft, y: e.offsetY + e.target.offsetTop };
+                        console.log(context);
                     }
                 }
             }

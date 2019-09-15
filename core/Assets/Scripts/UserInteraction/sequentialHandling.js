@@ -3,19 +3,9 @@ let sequentialHandling = {
     createInstance: function() {
         let inst = {
             name: 'Sequential Handling',
-            params: {
-                singleActions: {
-                    name: 'Single Actions',
-                    type: 'array',
-                    value: [],
-                    defaultElement: {
-                        type: 'gameObject',
-                        value: undefined
-                    }
-                }
-            },
             interface: {
                 state: 'Enabled',
+                context: {},
                 getStateNodes: function(gos) {
                     let res = [];
                     for (let i = 0; i < gos.length; ++i) {
@@ -24,36 +14,34 @@ let sequentialHandling = {
                     return res;
                 },
                 handleEventImpl: function(inst, e) {
-                    let children = inst.interface.getChildrenSorted(inst);
+                    let children = inst.interface.getStateNodes(inst.gameObject.children);
                     for (let i = 0; i < children.length; ++i) {
-                        children[i].interface.handleEvent(children[i], e);
-                        inst.interface.refresh(inst);
-                    }
-                },
-                refresh: function(inst) {
-                    let singleModeProgram = undefined;
-                    let singleActions = inst.interface.getSingleActions(inst);
-                    for (let i = 0; i < singleActions.length; ++i) {
-                        if (singleActions[i].interface.state === 'Processing') {
-                            singleModeProgram = singleActions[i];
+                        let cur = children[i];
+                        if (cur.interface.state !== 'Disabled') {
+                            children[i].interface.handleEvent(children[i], e);
                             break;
                         }
                     }
-                    if (singleModeProgram) {
-                        let children = inst.interface.getStateNodes(inst.gameObject.children);
-                        for (let i = 0 ; i < children.length; ++i) {
-                            let cur = children[i];
-                            if (cur.gameObject.id !== singleModeProgram.gameObject.id) {
-                                cur.interface.state = 'Disabled';
-                            }
+                    inst.interface.refresh(inst);
+                },
+                refresh: function(inst) {
+                    let childNodes = inst.interface.getStateNodes(inst.gameObject.children);
+                    let finished = true;
+                    for (let i = 0; i < childNodes.length; ++i) {
+                        if (childNodes[i].interface.state !== 'Disabled') {
+                            finished = false;
                         }
-                    } 
-                    else {
-                        let children = inst.interface.getStateNodes(inst.gameObject.children);
-                        for (let i = 0 ; i < children.length; ++i) {
-                            let cur = children[i];
-                            cur.interface.state = 'Enabled';
+                    }
+                    if (finished) {
+                        for (let i = 0; i < childNodes.length; ++i) {
+                            childNodes[i].interface.state = 'Enabled';
                         }
+                        inst.interface.state = 'Disabled';
+                        inst.interface.context = {};
+                        return;
+                    }
+                    if (childNodes[0].interface.state !== 'Enabled') {
+                        inst.interface.state = 'Processing';
                     }
                 }
             }
