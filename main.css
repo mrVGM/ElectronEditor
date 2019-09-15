@@ -4,6 +4,7 @@ html, body {
     right: 0%;
     top: 0%;
     bottom: 0%;
+    font-size: 0px;
 }
 
 .full-size {
