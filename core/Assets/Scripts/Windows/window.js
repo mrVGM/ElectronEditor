@@ -84,6 +84,7 @@ let window = {
                         groupPrefab.parent = inst.interface.getElement(inst);
                         if (groupPrefab.parent) {
                             groupPrefab.parent = groupPrefab.parent.gameObject;
+                            groupPrefab.parent.children = [groupPrefab];
                         }
 
                         if (inst.parent) {
