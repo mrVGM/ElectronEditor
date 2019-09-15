@@ -45,23 +45,56 @@ let window = {
                 }
             },
             interface: {
+                getElement: function(inst) {
+                    let cur = inst.gameObject;
+                    while(true) {
+                        cur = cur.parent;
+                        if (!cur) {
+                            break;
+                        }
+                        let renderEJS = document.appData.api.getComponent(cur, document.appData.scripts.renderEJS);
+                        if (!renderEJS) {
+                            continue;
+                        }
+                        if (renderEJS.interface.isGroupElement) {
+                            return renderEJS;
+                        }
+                    }
+                },
+                getGroup: function(inst) {
+                    let element = inst.interface.getElement(inst);
+                    if (!element) {
+                        return;
+                    }
+                    let group = element.gameObject.parent;
+                    group = document.appData.api.getComponent(group, document.appData.scripts.renderEJS);
+                    return group;
+                },
                 group: undefined,
                 split: function(inst, splitType) {
                     curWindow = inst.interface.findHTMLElement(inst);
-                    if (!inst.interface.group || inst.interface.group.params.groupType.value !== splitType) {
+                    let group = inst.interface.getGroup(inst);
+                    if (!group || group.params.groupType.value !== splitType) {
                         let prefabID = inst.params.horizontalGroup.value;
                         if (splitType === 'Vertical') {
                             prefabID = inst.params.verticalGroup.value;
                         }
                         let groupPrefab = document.appData.library[prefabID].prefabStr;
                         groupPrefab = document.appData.api.instantiatePrefabFromString(groupPrefab);
+                        groupPrefab.parent = inst.interface.getElement(inst);
+                        if (groupPrefab.parent) {
+                            groupPrefab.parent = groupPrefab.parent.gameObject;
+                        }
+
+                        if (inst.parent) {
+                            inst.parent.children = [groupPrefab];
+                        }
                         let groupComponent = document.appData.api.getComponent(groupPrefab, document.appData.scripts.renderEJS);
                         curWindow.parentElement.innerHTML = groupComponent.interface.render(groupComponent);
                         groupComponent.interface.addElement(groupComponent, 0, inst);
                         groupComponent.interface.addElement(groupComponent, 0);
                     } 
                     else {
-                        let group = inst.interface.group;
                         let index = -1;
                         for (let i = 0; i < group.gameObject.children.length; ++i) {
                             let elem = group.gameObject.children[i];
@@ -84,14 +117,14 @@ let window = {
                     inst.interface.split(inst, 'Vertical');
                 },
                 close: function(inst) {
-                    if (!inst.interface.group) {
+                    if (!inst.interface.getGroup(inst)) {
                         console.log('Cannot close the initial window!');
                         return;
                     }
 
                     console.log('Closing');
 
-                    let group = inst.interface.group;
+                    let group = inst.interface.getGroup(inst);
                     let index = -1;
                     for (let i = 0; i < group.gameObject.children.length; ++i) {
                         let curElem = group.gameObject.children[i];
@@ -122,6 +155,42 @@ let window = {
                         elementToExpand.interface.height += element.interface.height;
                     }
                     elementToExpand.interface.refreshSize(elementToExpand);
+
+                    if (group.gameObject.children.length > 1) {
+                        return;
+                    }
+
+                    let win = elementToExpand.gameObject.children[0];
+                    win = document.appData.api.getComponent(win, document.appData.scripts.renderEJS);
+                    let winHTML = win.interface.findHTMLElement(win);
+                    let groupHTMLElement = group.interface.findHTMLElement(group);
+                    
+                    if (!group.interface.getElement(group)) {
+                        let groupParentElement = groupHTMLElement.parentElement;
+                        groupParentElement.removeChild(groupHTMLElement);
+                        groupParentElement.appendChild(winHTML);
+
+                        let liveObjects = document.appData.liveObjects;
+                        for (let i = 0; i < liveObjects.length; ++i) {
+                            if (liveObjects[i].id === group.gameObject.id) {
+                                liveObjects.splice(i, 1);
+                                break;
+                            }
+                        }
+
+                        win.gameObject.parent = undefined;
+                        liveObjects.push(win.gameObject);
+                        return;
+                    }
+
+                    let elementOfTheGroup = group.interface.getElement(group);
+
+                    elementOfTheGroup.gameObject.children = [win.gameObject];
+                    win.gameObject.parent = elementOfTheGroup.gameObject;
+
+                    let elementOfTheGroupHTML = elementOfTheGroup.interface.findHTMLElement(elementOfTheGroup);
+                    elementOfTheGroupHTML.removeChild(elementOfTheGroupHTML.firstChild);
+                    elementOfTheGroupHTML.appendChild(winHTML);
                 }
             }
         };

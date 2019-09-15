@@ -21,12 +21,27 @@ let windowGroup = {
                 }
             },
             interface: {
+                getElement: function(inst) {
+                    let cur = inst.gameObject;
+                    while(true) {
+                        cur = cur.parent;
+                        if (!cur) {
+                            break;
+                        }
+                        let renderEJS = document.appData.api.getComponent(cur, document.appData.scripts.renderEJS);
+                        if (!renderEJS) {
+                            continue;
+                        }
+                        if (renderEJS.interface.isGroupElement) {
+                            return renderEJS;
+                        }
+                    }
+                },
                 addElement: function(inst, index, windowElement) {
                     let elementPrefab = document.appData.library[inst.params.groupElementPrefab.value].prefabStr;
                     let element = document.appData.api.instantiatePrefabFromString(elementPrefab);
                     
                     let groupElement = document.appData.api.getComponent(element, document.appData.scripts.renderEJS);
-                    groupElement.interface.group = inst;
 
                     element.parent = inst.gameObject;
 
@@ -75,7 +90,6 @@ let windowGroup = {
                     }
                     element.children.push(window.gameObject);
                     window.gameObject.parent = element;
-                    window.interface.group = groupElement.interface.group;
 
                     let windowHTML = window.interface.renderToElement(window);
                     groupElementHTML.appendChild(windowHTML);
