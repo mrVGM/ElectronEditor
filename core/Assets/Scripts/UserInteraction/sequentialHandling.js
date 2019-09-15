@@ -1,8 +1,8 @@
-let parallelHandling = {
+let sequentialHandling = {
     extendsFrom: 'Assets\\Scripts\\UserInteraction\\stateNode.js',
     createInstance: function() {
         let inst = {
-            name: 'Parallel Handling',
+            name: 'Sequential Handling',
             params: {
                 singleActions: {
                     name: 'Single Actions',
@@ -22,26 +22,6 @@ let parallelHandling = {
                         res.push(document.appData.api.getComponent(gos[i], document.appData.scripts.stateNode));
                     }
                     return res;
-                },
-                getSingleActions: function(inst) {
-                    let singleActions = [];
-                    for (let i = 0; i < inst.params.length; ++i) {
-                        singleActions.push(inst.params[i].gameObject);
-                    }
-                    return inst.interface.getStateNodes(singleActions);
-                },
-                getChildrenSorted: function(inst) {
-                    let children = inst.interface.getStateNodes(inst.gameObject.children);
-                    for (let i = 0; i < children.length - 1; ++i) {
-                        for (let j = i+1; j < children.length; ++j) {
-                            if (children[j].params.priority.value < children[j].params.priority.value) {
-                                let tmp = children[i];
-                                children[i] = children[j];
-                                children[j] = tmp;   
-                            }
-                        }
-                    }
-                    return children;
                 },
                 handleEventImpl: function(inst, e) {
                     let children = inst.interface.getChildrenSorted(inst);
@@ -82,4 +62,4 @@ let parallelHandling = {
     }
 };
 
-module.exports = parallelHandling;
+module.exports = sequentialHandling;

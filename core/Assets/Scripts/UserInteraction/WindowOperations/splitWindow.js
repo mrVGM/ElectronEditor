@@ -1,8 +1,8 @@
 let slpitWindow = {
     extendsFrom: 'Assets\\Scripts\\UserInteraction\\stateNode.js',
-    name: 'Split Down',
     createInstance: function() {
         let inst = {
+            name: 'Split',
             params: {
                 splitDirection: {
                     name: 'Split direction',

@@ -2,9 +2,9 @@ let stateNode = {
     onLoad: function() {
         document.appData.scripts.stateNode = stateNode;
     },
-    name: 'State Node',
     createInstance: function() {
         let inst = {
+            name: 'State Node',
             params: {
                 priority: {
                     name: 'Priority',
