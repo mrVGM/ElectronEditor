@@ -37,10 +37,9 @@ let resizeWindowsStart = {
 
                         let context = pipe.interface.context;
                         context.affectedElements = affectedElements;
-                        inst.interface.state = 'Disabled';
-                        
                         context.initialMousePos = { x: e.offsetX + e.target.offsetLeft, y: e.offsetY + e.target.offsetTop };
-                        console.log(context);
+                        context.group = splitLine.interface.getGroup(splitLine);
+                        inst.interface.state = 'Disabled';
                     }
                 }
             }
