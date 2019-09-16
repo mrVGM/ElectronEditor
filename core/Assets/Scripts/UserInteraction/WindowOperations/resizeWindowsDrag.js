@@ -69,7 +69,7 @@ let resizeWindowsDrag = {
                     }
                     else {
                         let percPos = (mousePos.y - bounds.top) / (bounds.bottom - bounds.top);
-                        let wholeElementsPerc = context.affectedElements[0].interface.height + context.affectedElements[1].interface.width;
+                        let wholeElementsPerc = context.affectedElements[0].interface.height + context.affectedElements[1].interface.height;
                         context.affectedElements[0].interface.height = percPos * wholeElementsPerc;
                         context.affectedElements[1].interface.height = (1 - percPos) * wholeElementsPerc;
                     }
