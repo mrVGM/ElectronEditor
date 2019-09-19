@@ -192,6 +192,21 @@ let window = {
                     let elementOfTheGroupHTML = elementOfTheGroup.interface.findHTMLElement(elementOfTheGroup);
                     elementOfTheGroupHTML.removeChild(elementOfTheGroupHTML.firstChild);
                     elementOfTheGroupHTML.appendChild(winHTML);
+                },
+                renderContent: function(inst, prefabID) {
+                    let prefabStr = document.appData.library[prefabID].prefabStr;
+                    let prefab = document.appData.api.instantiatePrefabFromString(prefabStr);
+                    let contentArea = inst.params.contentArea.gameObjectRef;
+                    let contentAreaRenderEJS = document.appData.api.getComponent(contentArea, document.appData.scripts.renderEJS);
+                    let contentAreaHTML = contentAreaRenderEJS.interface.findHTMLElement(contentAreaRenderEJS);
+                    while (contentAreaHTML.firstChild) {
+                        contentAreaHTML.removeChild(contentAreaHTML.firstChild);
+                    }
+                    contentArea.children = [prefab];
+                    prefab.parent = contentArea;
+                    let prefabRenderEJS = document.appData.api.getComponent(prefab, document.appData.scripts.renderEJS);
+                    let contentElement = prefabRenderEJS.interface.renderToElement(prefabRenderEJS);
+                    contentAreaHTML.appendChild(contentElement);
                 }
             }
         };
