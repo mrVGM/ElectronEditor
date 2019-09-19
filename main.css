@@ -69,3 +69,27 @@ html, body {
     width: 100%;
     background-color: darkslategrey;
 }
+
+.game-object-icon-collapsed {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    background-size: 100%;
+    background-image: url(core/Assets/Images/play-button.png);
+}
+
+.game-object-icon-expanded {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    background-size: 100%;
+    transform: rotate(90deg);
+    background-image: url(core/Assets/Images/play-button.png);
+}
+
+.game-object-no-icon {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    background-size: 100%;
+}

@@ -1,3 +1,17 @@
 <div app_id="<%= source.interface.id %>" class="full-size" style="position: relative">
-    GameObject
+    <div style="display: inline-block; white-space: nowrap">
+        <div style="display: inline-block; white-space: nowrap">
+            <% let icon = source.params.icon.gameObjectRef; %>
+            <% icon = document.appData.api.getComponent(icon, document.appData.scripts.renderEJS); %>
+            <%- icon.interface.render(icon) %>
+        </div>
+        <div style="display: inline-block; white-space: nowrap">
+            <% let name = source.params.name.gameObjectRef; %>
+            <% name = document.appData.api.getComponent(name, document.appData.scripts.renderEJS); %>
+            <%- name.interface.render(name) %>
+        </div>
+    </div>
+    <div style="position: relative; left: 7px">
+        Children Placeholder
+    </div>
 </div>

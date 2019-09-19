@@ -1,4 +1,4 @@
-<div app_id="<%= source.interface.id %>" class="full-size" style="position: relative">
+<div app_id="<%= source.interface.id %>" style="position: absolute; left: 10px; right: 100%; top: 10px; bottom: 0%;">
     <% let rootGO = source.interface.getRootGameObject(source); %>
     <%- rootGO.interface.render(rootGO) %>
 </div>
