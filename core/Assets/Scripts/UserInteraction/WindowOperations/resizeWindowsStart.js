@@ -8,6 +8,11 @@ let resizeWindowsStart = {
                     name: 'Split Line Tag',
                     type: 'fileObject',
                     value: undefined
+                },
+                contextTag: {
+                    name: 'Context Tag',
+                    type: 'fileObject',
+                    value: undefined
                 }
             },
             interface: {
@@ -35,7 +40,8 @@ let resizeWindowsStart = {
                         let pipe = inst.gameObject.parent;
                         pipe = document.appData.api.getComponent(pipe, document.appData.scripts.stateNode);
 
-                        let context = pipe.interface.context;
+                        let context = {};
+                        document.appData.UIContext[inst.params.contextTag.value] = context;
                         context.affectedElements = affectedElements;
                         context.initialMousePos = { x: e.offsetX + e.target.offsetLeft, y: e.offsetY + e.target.offsetTop };
                         context.group = splitLine.interface.getGroup(splitLine);

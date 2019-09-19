@@ -8,7 +8,12 @@ let resizeWindowsDrag = {
                     name: 'Split Line Tag',
                     type: 'fileObject',
                     value: undefined
-                }
+                },
+                contextTag: {
+                    name: 'Context Tag',
+                    type: 'fileObject',
+                    value: undefined
+                },
             },
             interface: {
                 state: 'Enabled',
@@ -26,7 +31,7 @@ let resizeWindowsDrag = {
                     }
                     let pipe = inst.gameObject.parent;
                     pipe = document.appData.api.getComponent(pipe, document.appData.scripts.stateNode);
-                    let context = pipe.interface.context;
+                    let context = document.appData.UIContext[inst.params.contextTag.value];
                     let groupHTML = context.group.interface.findHTMLElement(context.group);
 
                     let affectedElements = [].concat(context.affectedElements);
@@ -81,6 +86,7 @@ let resizeWindowsDrag = {
 
                     if (e.type === 'mouseup') {
                         inst.interface.state = 'Disabled';
+                        delete document.appData.UIContext[inst.params.contextTag.value];
                         return;
                     }
                 }

@@ -11,6 +11,8 @@
             api();
             let appStarter = require('./appStarter');
             appStarter();
+
+            document.appData.UIContext = {};
             function dispatchEvent(e) {
                 let mainNode = document.appData.userInteractionLogic;
                 mainNode = document.appData.api.getComponent(mainNode, document.appData.scripts.stateNode);
