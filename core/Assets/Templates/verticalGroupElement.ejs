@@ -1,4 +1,4 @@
-<div app_id="<%= source.interface.id %>" style="height: <%= source.interface.height %>%; width: <%= source.interface.width %>%;">
+<div app_id="<%= source.interface.id %>" style="position: relative; height: <%= source.interface.height %>%; width: <%= source.interface.width %>%;">
     <% if (source.gameObject.children.length > 0) { %>
         <% let child = source.gameObject.children[0]; %>
         <% child = document.appData.api.getComponent(child, document.appData.scripts.renderEJS); %>
