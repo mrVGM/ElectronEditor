@@ -135,7 +135,7 @@ function linkGameObjectParam(param, root) {
         return;
     }
     if (param.type === 'custom') {
-        linkGameObjectParams(params.value, root);
+        linkGameObjectParams(param.value, root);
         return;
     }
 }

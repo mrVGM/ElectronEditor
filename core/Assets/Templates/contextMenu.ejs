@@ -1,0 +1,9 @@
+<div app_id="<%= source.interface.id %>">
+    <% let childElements = source.children; %>
+    <% for (let i = 0; i < childElements.length; ++i) { %>
+        <% let cur = document.appData.api.getComponent(childElement[i], document.appData.scripts.renderEJS); %>
+        <div style="position: relative">
+            <%- cur.interface.render(cur) %>
+        </div>
+    <% } %>
+</div>
