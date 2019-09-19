@@ -1,3 +1,4 @@
 <div app_id="<%= source.interface.id %>" class="full-size" style="position: relative">
-    Hierarchy
+    <% let rootGO = source.interface.getRootGameObject(source); %>
+    <%- rootGO.interface.render(rootGO) %>
 </div>
