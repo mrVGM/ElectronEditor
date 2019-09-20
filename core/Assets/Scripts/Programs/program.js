@@ -29,6 +29,7 @@ let program = {
                 started: false,
                 finished: false,
                 stop: false,
+                context: {},
                 events: {},
                 init: function(inst) {
                     for (let i = 0; i < inst.params.subscribeTo.value.length; ++i) {
@@ -37,8 +38,20 @@ let program = {
                         inst.interface.subscribers.push(program);
                     }
                 },
-                startProgram: function(inst) {
-                    
+                stopProgram: function(inst) {
+                    inst.interface.stop = true;
+                },
+                startProgram: function(inst, context) {
+                    inst.interface.started = true;
+                    inst.interface.finished = false;
+                    inst.interface.stop = false;
+                    inst.interface.context = context;
+
+                    let crt = inst.interface.coroutine(inst);
+                    crt = crt.next();
+                    if (!crt.done) {
+                        document.appData.programsBrain.prioritizedCoroutines.push({ priority: program.params.priority.value, coroutine: crt });
+                    }
                 },
                 main: function* (inst) {},
                 finish: function*(inst) {},

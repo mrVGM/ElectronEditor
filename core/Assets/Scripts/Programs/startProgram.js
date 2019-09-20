@@ -13,11 +13,7 @@ let startProgram = {
                 init: function(inst) {
                     let program = inst.params.program.gameObjectRef;
                     program = document.appData.api.getComponent(program, document.appData.scripts.programs.program);
-                    let crt = program.interface.coroutine(program);
-                    crt = crt.next();
-                    if (!crt.done) {
-                        document.appData.programsBrain.prioritizedCoroutines.push({ priority: program.params.priority.value, coroutine: crt });
-                    }
+                    program.interface.startProgram(program, {});
                 }
             }
         };
