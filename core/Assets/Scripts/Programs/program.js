@@ -48,9 +48,9 @@ let program = {
                     inst.interface.context = context;
 
                     let crt = inst.interface.coroutine(inst);
-                    crt = crt.next();
-                    if (!crt.done) {
-                        document.appData.programsBrain.prioritizedCoroutines.push({ priority: program.params.priority.value, coroutine: crt });
+                    let res = crt.next();
+                    if (!res.done) {
+                        document.appData.programsBrain.prioritizedCoroutines.push({ priority: inst.params.priority.value, coroutine: crt });
                     }
                 },
                 main: function* (inst) {},
@@ -68,7 +68,7 @@ let program = {
                         yield;
                         cur = finish.next();
                     }
-                    inst.finished = true;
+                    inst.interface.finished = true;
                 },
                 coroutine: function*(inst) {
                     let comb = inst.interface.combined(inst);

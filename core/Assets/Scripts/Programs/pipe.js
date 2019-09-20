@@ -13,7 +13,7 @@ let pipe = {
                     return false;
                 },
                 getChildPrograms: function(inst) {
-                    let childPrograms = inst.gameObject.children;
+                    let childPrograms = [].concat(inst.gameObject.children);
                     for (let i = 0; i < childPrograms.length; ++i) {
                         childPrograms[i] = document.appData.api.getComponent(childPrograms[i], document.appData.scripts.programs.program);
                     }
