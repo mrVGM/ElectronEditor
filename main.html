@@ -14,9 +14,11 @@
 
             document.appData.UIContext = {};
             function dispatchEvent(e) {
-                let mainNode = document.appData.userInteractionLogic;
+                document.appData.programsBrain.currentEvent = e;
+                document.appData.programsBrain.tick();
+                /*let mainNode = document.appData.userInteractionLogic;
                 mainNode = document.appData.api.getComponent(mainNode, document.appData.scripts.stateNode);
-                mainNode.interface.handleEvent(mainNode, e);
+                mainNode.interface.handleEvent(mainNode, e);*/
             }
             document.addEventListener('click', function(e) {
                 dispatchEvent(e);

@@ -135,6 +135,21 @@ function processAppSettingsAsset(appSettingsAsset) {
     prefabStr = prefab.prefabStr;
     prefabInst = document.appData.api.instantiatePrefabFromString(prefabStr);
     document.appData.userInteractionLogic = prefabInst;
+
+    function callInit(go) {
+        for (let i = 0; i < go.components.length; ++i) {
+            let inst = go.components[i].instance;
+            if (inst.interface.init) {
+                inst.interface.init(inst);
+            }
+        }
+
+        for (let i = 0; i < go.children.length; ++i) {
+            callInit(go.children[i]);
+        }
+    }
+
+    callInit(prefabInst);
 }
 
 function getAppSettingsAsset() {
