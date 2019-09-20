@@ -62,13 +62,16 @@ let program = {
                         yield;
                         cur = main.next();
                     }
+                    document.appData.programsBrain.tickAgain = true;
                     let finish = inst.interface.finish(inst);
                     cur = finish.next();
                     while(!cur.done) {
                         yield;
+                        document.appData.programsBrain.tickAgain = true;
                         cur = finish.next();
                     }
                     inst.interface.finished = true;
+                    document.appData.programsBrain.tickAgain = true;
                 },
                 coroutine: function*(inst) {
                     let comb = inst.interface.combined(inst);

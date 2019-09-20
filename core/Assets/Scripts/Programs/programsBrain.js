@@ -4,7 +4,16 @@ let programsBrain = {
     },
     prioritizedCoroutines: [],
     currentEvent: undefined,
+    tickAgain: false,
     tick: function() {
+        programsBrain.tickImpl();
+        programsBrain.currentEvent = undefined;
+        while (programsBrain.tickAgain) {
+            programsBrain.tickImpl();
+        }
+    },
+    tickImpl: function() {
+        programsBrain.tickAgain = false;
         let crts = programsBrain.prioritizedCoroutines;
         programsBrain.prioritizedCoroutines = [];
         for (let i = 0; i < crts.length - 1; ++i) {
