@@ -93,3 +93,10 @@ html, body {
     height: 7px;
     background-size: 100%;
 }
+
+.context-menu {
+    z-index: 100;
+    background-color: rgb(240, 240, 240);
+    border: solid;
+    border-width: 1px;
+}

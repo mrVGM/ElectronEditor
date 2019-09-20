@@ -23,6 +23,11 @@ let openContextMenu = {
                             }
                         }
                     }
+                },
+                uiContextTag: {
+                    name: 'UI Context Tag',
+                    type: 'fileObject',
+                    value: undefined
                 }
             },
             interface: {
@@ -47,9 +52,26 @@ let openContextMenu = {
                     for (let i = 0; i < inst.params.menus.value.length; ++i) {
                         let cur = inst.params.menus.value[i].value;
                         if (cur.elementTag.value === taggedElement.params.elementType.value) {
-                            console.log('Openning menu ', document.appData.library[cur.menuPrefab.value]);
+                            let contextMenuPrefabStr = document.appData.library[cur.menuPrefab.value].prefabStr;
+                            let menu = document.appData.api.instantiatePrefabFromString(contextMenuPrefabStr);
+                            menu = document.appData.api.getComponent(menu, document.appData.scripts.renderEJS);
+                            let menuHTML = menu.interface.renderToElement(menu);
+
+                            
+                            target.appendChild(menuHTML);
+                            
+                            menuHTML.style.left = e.offsetX + 'px';
+                            menuHTML.style.top = e.offsetY + 'px';
+                            
+                            document.appData.UIContext[inst.params.uiContextTag.value] = {
+                                sourceElement: taggedElement,
+                                sourceHTML: target,
+                                menu: menu,
+                                menuHTML: menuHTML,
+                            };
                         }
                     }
+                    inst.interface.state = 'Disabled';
                 },
             }
         };

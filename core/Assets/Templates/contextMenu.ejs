@@ -1,8 +1,8 @@
-<div app_id="<%= source.interface.id %>">
-    <% let childElements = source.children; %>
+<div app_id="<%= source.interface.id %>" class="context-menu" style="position: absolute;">
+    <% let childElements = source.gameObject.children; %>
     <% for (let i = 0; i < childElements.length; ++i) { %>
-        <% let cur = document.appData.api.getComponent(childElement[i], document.appData.scripts.renderEJS); %>
-        <div style="position: relative">
+        <% let cur = document.appData.api.getComponent(childElements[i], document.appData.scripts.renderEJS); %>
+        <div style="position: relative; padding-left: 2px; padding-right: 2px">
             <%- cur.interface.render(cur) %>
         </div>
     <% } %>
