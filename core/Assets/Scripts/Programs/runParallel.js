@@ -26,6 +26,15 @@ let runParallel = {
                     }
 
                     while (inst.interface.anyRunning(childPrograms)) {
+                        let singleProgramTag = document.appData.appSettings.params.programsSettings.value.singleProgramTag.value;
+                        if (inst.interface.events[singleProgramTag]) {
+                            let programInSingleMode = inst.interface.events[singleProgramTag][0];
+                            for (let i = 0; i < childPrograms.length; ++i) {
+                                if (childPrograms[i].gameObject.id !== programInSingleMode.gameObject.id) {
+                                    childPrograms[i].interface.stopProgram(childPrograms[i]);
+                                }
+                            }
+                        }
                         yield;
                     }
                 },

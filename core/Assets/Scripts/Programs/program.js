@@ -35,7 +35,7 @@ let program = {
                     for (let i = 0; i < inst.params.subscribeTo.value.length; ++i) {
                         let program = inst.params.subscribeTo.value[i].gameObjectRef;
                         program = document.appData.api.getComponent(program, document.appData.scripts.programs.program);
-                        inst.interface.subscribers.push(program);
+                        program.interface.subscribers.push(inst);
                     }
                 },
                 stopProgram: function(inst) {
@@ -50,7 +50,18 @@ let program = {
                     let crt = inst.interface.coroutine(inst);
                     let res = crt.next();
                     if (!res.done) {
-                        document.appData.programsBrain.prioritizedCoroutines.push({ priority: inst.params.priority.value, coroutine: crt });
+                        document.appData.programsBrain.prioritizedCoroutines.push({ priority: inst.params.priority.value, coroutine: crt, program: inst });
+                    }
+                },
+                dispatchEvent: function(inst, tag, data) {
+                    for (let i = 0; i < inst.interface.subscribers.length; ++i) {
+                        let cur = inst.interface.subscribers[i];
+                        let eventsArr = cur.interface.events[tag];
+                        if (!eventsArr) {
+                            eventsArr = [];
+                            cur.interface.events[tag] = eventsArr;
+                        }
+                        eventsArr.push(data);
                     }
                 },
                 main: function* (inst) {},
@@ -62,24 +73,22 @@ let program = {
                         yield;
                         cur = main.next();
                     }
-                    document.appData.programsBrain.tickAgain = true;
                     let finish = inst.interface.finish(inst);
                     cur = finish.next();
                     while(!cur.done) {
                         yield;
-                        document.appData.programsBrain.tickAgain = true;
                         cur = finish.next();
                     }
                     inst.interface.finished = true;
-                    document.appData.programsBrain.tickAgain = true;
                 },
                 coroutine: function*(inst) {
                     let comb = inst.interface.combined(inst);
                     let cur = comb.next();
-                    inst.events = {};
+                    inst.interface.events = {};
                     while (!cur.done) {
                         yield;
                         cur = comb.next();
+                        inst.interface.events = {};
                     }
                 }
             }

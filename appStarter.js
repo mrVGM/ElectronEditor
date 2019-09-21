@@ -184,6 +184,7 @@ function appStarter() {
                         let initApp = require('./initApp');
                         initApp(function() {
                             let appSettingsAsset = getAppSettingsAsset();
+                            document.appData.appSettings = appSettingsAsset;
                             processAppSettingsAsset(appSettingsAsset);
                         });
                     });

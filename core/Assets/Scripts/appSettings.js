@@ -15,6 +15,17 @@ let appSettings = {
                     name: 'User Interaction Prefab',
                     type: 'fileObject',
                     value: undefined,
+                },
+                programsSettings: {
+                    name: 'Programs Settings',
+                    type: 'custom',
+                    value: {
+                        singleProgramTag: {
+                            name: 'Single Program Tag',
+                            type: 'fileObject',
+                            value: undefined
+                        }
+                    }
                 }
             }
         };
