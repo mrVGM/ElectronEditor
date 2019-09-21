@@ -12,7 +12,6 @@ let programsBrain = {
     tickImpl: function() {
         programsBrain.tickAgain = false;
         let crts = programsBrain.prioritizedCoroutines;
-        console.log(crts);
         programsBrain.prioritizedCoroutines = [];
         for (let i = 0; i < crts.length - 1; ++i) {
             for (let j = i + 1; j < crts.length; ++j) {
