@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "ejs": "^2.7.1",
-    "getmac": "^1.4.6",
+    "getmac": "^5.20.0",
     "uuid": "^3.3.3"
   }
 }
